@@ -2,7 +2,9 @@ package aoc
 
 import (
 	"iter"
+	"log"
 	"slices"
+	"strconv"
 
 	"golang.org/x/exp/constraints"
 )
@@ -200,4 +202,42 @@ func Tally[T comparable](in []T) map[T]int {
 	}
 
 	return ret
+}
+
+func Count[T any](f func(T) bool, in iter.Seq[T]) int {
+	var ret int
+	for v := range in {
+		if f(v) {
+			ret++
+		}
+	}
+
+	return ret
+}
+
+func All[T any](f func(T) bool, in iter.Seq[T]) bool {
+	ret := true
+	for v := range in {
+		ret = ret && f(v)
+	}
+
+	return ret
+}
+
+func Any[T any](f func(T) bool, in iter.Seq[T]) bool {
+	ret := false
+	for v := range in {
+		ret = ret || f(v)
+	}
+
+	return ret
+}
+
+func Atoi(a string) int {
+	v, err := strconv.Atoi(a)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	return v
 }

@@ -8,22 +8,17 @@ import (
 	"log"
 	"os"
 	"slices"
-	"strings"
 
 	"github.com/alsm/aoc2024/aoc"
 )
 
 func readInput(b io.Reader) ([]int, []int) {
 	ls := bufio.NewScanner(b)
-	var lines []string
-	for ls.Scan() {
-		lines = append(lines, strings.TrimSpace(ls.Text()))
-	}
 
 	var left, right []int
 	var l, r int
-	for line := range slices.Values(lines) {
-		fmt.Sscanf(line, "%d   %d", &l, &r)
+	for ls.Scan() {
+		fmt.Sscanf(ls.Text(), "%d   %d", &l, &r)
 		left = append(left, l)
 		right = append(right, r)
 	}

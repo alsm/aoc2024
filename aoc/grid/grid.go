@@ -120,6 +120,19 @@ func (g *Grid[T]) GetSliceToEdge(x, y int64, movement aoc.Point) []T {
 	return ret
 }
 
+func (g *Grid[T]) GetSliceInDirectionP(p aoc.Point, direction aoc.Point, count int) []T {
+	var ret []T
+	for ; g.IsValidPoint(p); p = p.Add(direction) {
+		ret = append(ret, g.GetStateP(p))
+		count -= 1
+		if count == 0 {
+			break
+		}
+	}
+
+	return ret
+}
+
 func (g *Grid[T]) SetState(x, y int64, state T) {
 	if g.IsValid(x, y) {
 		g.state[y][x] = state

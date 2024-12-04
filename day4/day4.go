@@ -31,32 +31,14 @@ func readInput(b io.Reader) *grid.Grid[rune] {
 }
 
 func findXmas(g *grid.Grid[rune], p aoc.Point) int {
-	ms := aoc.Map(func(np aoc.Point) grid.Vector {
-		return grid.Vector{
-			Point:     np,
-			Direction: np.Sub(p),
-		}
-	}, aoc.Filter(func(p aoc.Point) bool { return g.GetState(p.X, p.Y) == 'M' }, slices.Values(g.Neighbours(p))))
-	as := aoc.Map(func(v grid.Vector) grid.Vector {
-		return grid.Vector{
-			Point:     v.Point.Add(v.Direction),
-			Direction: v.Direction,
-		}
-	}, aoc.Filter(func(v grid.Vector) bool {
-		np := v.Point.Add(v.Direction)
-		return g.IsValidPoint(np) && g.GetState(np.X, np.Y) == 'A'
-	}, ms))
-	ss := aoc.Map(func(v grid.Vector) grid.Vector {
-		return grid.Vector{
-			Point:     v.Point.Add(v.Direction),
-			Direction: v.Direction,
-		}
-	}, aoc.Filter(func(v grid.Vector) bool {
-		np := v.Point.Add(v.Direction)
-		return g.IsValidPoint(np) && g.GetState(np.X, np.Y) == 'S'
-	}, as))
+	maybes := aoc.Map(func(d aoc.Point) []rune {
+		return g.GetSliceInDirectionP(p, d, 4)
+	}, slices.Values(grid.Directions8))
+	xmass := aoc.Filter(func(x []rune) bool {
+		return string(x) == "XMAS"
+	}, maybes)
 
-	return len(slices.Collect(ss))
+	return len(slices.Collect(xmass))
 }
 
 func partOne(g *grid.Grid[rune]) int {
@@ -74,15 +56,13 @@ func partOne(g *grid.Grid[rune]) int {
 }
 
 func findMas(g *grid.Grid[rune], p aoc.Point) bool {
-	x := []aoc.Point{{X: -1, Y: -1}, {X: -1, Y: 1}, {X: 1, Y: -1}, {X: 1, Y: 1}}
-	a := (g.GetStateP(p.Add(x[0])) - g.GetStateP(p.Add(x[1]))) +
-		(g.GetStateP(p.Add(x[2])) - g.GetStateP(p.Add(x[3])))
-	b := (g.GetStateP(p.Add(x[0])) - g.GetStateP(p.Add(x[2]))) +
-		(g.GetStateP(p.Add(x[1])) - g.GetStateP(p.Add(x[3])))
+	m1 := g.GetSliceInDirectionP(p.Add(aoc.Point{-1, -1}), aoc.Point{1, 1}, 3)
+	m2 := g.GetSliceInDirectionP(p.Add(aoc.Point{1, -1}), aoc.Point{-1, 1}, 3)
 
-	return (aoc.Abs(a) == 12 || aoc.Abs(b) == 12) && !slices.Contains(slices.Collect(aoc.Map(func(np aoc.Point) rune {
-		return g.GetStateP(p.Add(np))
-	}, slices.Values(x))), 'A')
+	slices.Sort(m1)
+	slices.Sort(m2)
+
+	return string(m1) == "AMS" && string(m2) == "AMS"
 }
 
 func partTwo(g *grid.Grid[rune]) int {

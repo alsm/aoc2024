@@ -130,6 +130,13 @@ func (p *Point) Add(b Point) Point {
 	}
 }
 
+func (p *Point) Sub(b Point) Point {
+	return Point{
+		X: p.X - b.X,
+		Y: p.Y - b.Y,
+	}
+}
+
 func (p *Point) Line(b Point) []Point {
 	var ret []Point
 	dx := b.X - p.X
@@ -240,4 +247,16 @@ func Atoi(a string) int {
 	}
 
 	return v
+}
+
+func Concat[V any](seqs ...iter.Seq[V]) iter.Seq[V] {
+	return func(yield func(V) bool) {
+		for _, seq := range seqs {
+			for e := range seq {
+				if !yield(e) {
+					return
+				}
+			}
+		}
+	}
 }

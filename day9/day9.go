@@ -85,17 +85,7 @@ func defrag(a []int) []int {
 		return 0
 	}
 
-	indices := map[int]int{
-		1: 0,
-		2: 0,
-		3: 0,
-		4: 0,
-		5: 0,
-		6: 0,
-		7: 0,
-		8: 0,
-		9: 0,
-	}
+	indices := make([]int, 10)
 	numLocs := genMap(a)
 	delete(numLocs, -1)
 	x := slices.Collect(maps.Keys(numLocs))
@@ -103,13 +93,13 @@ func defrag(a []int) []int {
 	slices.Reverse(x)
 	for n := range slices.Values(x) {
 		r := numLocs[n]
-		i := findGap(indices[n], r.l)
+		i := findGap(indices[r.l], r.l)
 		if i != 0 && i < r.i {
 			for z := range r.l {
 				a[i+z] = n
 				a[r.i+z] = -1
 			}
-			indices[n] = i + r.l
+			indices[r.l] = i + r.l
 		}
 	}
 
@@ -149,7 +139,7 @@ func partTwo(d string) int64 {
 }
 
 func main() {
-	d, _ := os.ReadFile("day9.txt")
+	d, _ := os.ReadFile("day9-test.txt")
 
 	log.Println("Part 1:", partOne(string(d)))
 	log.Println("Part 2:", partTwo(string(d)))

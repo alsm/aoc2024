@@ -123,7 +123,7 @@ func IPow(base, exp int64) int64 {
 func Atoi(a string) int {
 	v, err := strconv.Atoi(a)
 	if err != nil {
-		log.Fatalln(err)
+		return -1
 	}
 
 	return v

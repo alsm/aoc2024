@@ -205,6 +205,20 @@ func (g *Grid[T]) StateMapWhere(f func(T) bool) map[aoc.Point]T {
 	return ret
 }
 
+func (g *Grid[T]) StatesWhere(f func(T) bool) []aoc.Point {
+	var ret []aoc.Point
+
+	for y, l := range g.state {
+		for x, s := range l {
+			if f(s) {
+				ret = append(ret, aoc.Point{X: int64(x), Y: int64(y)})
+			}
+		}
+	}
+
+	return ret
+}
+
 func (g *Grid[T]) Clone() *Grid[T] {
 	ng := Grid[T]{
 		xLen:      g.xLen,

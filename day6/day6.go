@@ -60,8 +60,6 @@ func getPath(s aoc.Point, g *grid.Grid[rune]) []aoc.Point {
 
 	points := make(map[aoc.Point]struct{})
 
-	g.SetStateP(guard.location, 'X')
-
 	for g.IsValidPoint(guard.Next()) {
 		if g.GetStateP(guard.Next()) == '#' {
 			guard.Turn()
@@ -89,7 +87,6 @@ func partTwo(s aoc.Point, g *grid.Grid[rune]) int {
 		return p == s
 	})
 	for p := range slices.Values(locs) {
-		// for _, p := range []aoc.Point{{6, 7}} {
 		g.SetStateP(p, '#')
 		guard := Guard{
 			location:  s,

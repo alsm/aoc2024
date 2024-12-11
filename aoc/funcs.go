@@ -456,6 +456,9 @@ func KeyWithValue[T comparable, V comparable](in map[T]V, val V) T {
 
 func Chunk[T any](in []T, size int) [][]T {
 	var ret [][]T
+	if x := len(in) % size; x != 0 {
+		in = append(in, make([]T, x)...)
+	}
 	for i := 0; i < len(in)/size; i++ {
 		skip := size
 		rem := len(in) - i*size
@@ -474,6 +477,15 @@ func SubSlice[T comparable](a, b []T) []T {
 		if !slices.Contains(b, v) {
 			ret = append(ret, v)
 		}
+	}
+
+	return ret
+}
+
+func Repeat[T any](x T, i int) []T {
+	ret := make([]T, i)
+	for j := range i {
+		ret[j] = x
 	}
 
 	return ret

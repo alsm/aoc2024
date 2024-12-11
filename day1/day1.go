@@ -30,21 +30,19 @@ func partOne(left, right []int) int {
 	slices.Sort(left)
 	slices.Sort(right)
 
-	z := aoc.Zip(slices.Values(left), slices.Values(right))
-	diffs := aoc.Map(func(v aoc.Zipped[int, int]) int {
-		return aoc.Abs(v.V1 - v.V2)
-	}, z)
-	return aoc.Reduce(func(s int, v int) int {
-		return s + v
-	}, 0, diffs)
+	z := aoc.Zip(left, right)
+	diffs := aoc.Map(z, func(v []int) int {
+		return aoc.Abs(v[0] - v[1])
+	})
+	return aoc.Sum(diffs)
 }
 
 func partTwo(left, right []int) int {
 	count := aoc.Tally(right)
 
-	return aoc.Reduce(func(s int, v int) int {
+	return aoc.Reduce(left, 0, func(s int, v int) int {
 		return s + v*count[v]
-	}, 0, slices.Values(left))
+	})
 }
 
 func main() {

@@ -139,7 +139,7 @@ func partTwo(d string) int64 {
 }
 
 func main() {
-	d, _ := os.ReadFile("day9-test.txt")
+	d, _ := os.ReadFile("day9.txt")
 
 	log.Println("Part 1:", partOne(string(d)))
 	log.Println("Part 2:", partTwo(string(d)))
